@@ -16,11 +16,9 @@ import java.util.List;
 
 @Service
 public class PoiServiceWord{
-    private XWPFDocument document;
     protected List<? extends EntityModel> entityList;
 
     public PoiServiceWord(List<? extends EntityModel> ModelList) {
-        document = new XWPFDocument();
         this.entityList = ModelList;
     }
     private void createCell(XWPFTableRow row, int pos, Object value){
@@ -33,7 +31,7 @@ public class PoiServiceWord{
         row.getCell(pos).setText((String) value);
     }
 
-    private void writeDataLines() {
+    private void writeDataLines(XWPFDocument document) {
         XWPFTable table = document.createTable(entityList.size()+1, 5);
         int rownumber = 0;
         table.getRow(rownumber).getCell(0).setText("Name");
@@ -63,7 +61,8 @@ public class PoiServiceWord{
 
 
     public void export(HttpServletResponse response) throws IOException {
-        writeDataLines();
+        XWPFDocument document = new XWPFDocument();
+        writeDataLines(document);
         ServletOutputStream outputStream = response.getOutputStream();
         document.write(outputStream);
         document.close();

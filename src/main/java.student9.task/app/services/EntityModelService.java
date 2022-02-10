@@ -1,8 +1,11 @@
 package app.services;
 
+import app.models.District;
 import app.models.EntityModel;
 import app.repository.MainRepository;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -58,5 +61,25 @@ public class EntityModelService <S extends MainRepository> {
         model.get().setStatus("deleted");
         model.get().setDate_remove(sqlDate);
         mainRepository.save(model.get());
+    }
+    public  <T extends EntityModel> void exportToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=entity" + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+        List<T> modelList = mainRepository.findAll();
+        PoiServiceExcel poiService = new PoiServiceExcel(modelList);
+        poiService.export(response);
+    }
+
+    public <T extends EntityModel> void exportToWord(HttpServletResponse response) throws IOException {
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=entity" + ".doc";
+        response.setHeader(headerKey, headerValue);
+        List<T> districtList =mainRepository.findAll();
+        PoiServiceWord poiServiceWord = new PoiServiceWord(districtList);
+        poiServiceWord.export(response);
+
+
     }
 }

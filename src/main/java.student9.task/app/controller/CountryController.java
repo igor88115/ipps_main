@@ -29,36 +29,6 @@ public class CountryController  extends BaseAbstractController {
         this.countryService = countryService;
     }
 
-
-//    @PostMapping
-//    @JsonView(Views.MainView.class)
-//    public Country create(@RequestBody Country country) {
-//        mainService.create(country);
-//        return countryRepository.save(country);
-//    }
-//
-//    @PutMapping
-//    public Country update(@RequestBody Country country) {
-//        return countryRepository.findById(country.getId())
-//                .map(countryDB -> {
-//                    countryDB.setName(country.getName());
-//                    countryDB.setDescription(country.getDescription());
-//                    mainService.update(countryDB);
-//                    return countryRepository.save(countryDB);
-//                })
-//                .orElseGet(() -> {
-//                    country.setId(id);
-//                    mainService.create(country);
-//                    return countryRepository.save(country);
-//                });
-//    }
-//
-//    @DeleteMapping("{id}")
-//    public void delete(@PathVariable("id") Optional<Country> country) {
-//        country.isPresent()
-//        mainService.delete(country);
-//        countryRepository.save(country);
-//    }
 //
 //    @GetMapping()
 //    @JsonView(Views.MainView.class)
@@ -68,24 +38,5 @@ public class CountryController  extends BaseAbstractController {
 //        Page<Country> page = this.countryRepository.findAll(pageable);
 //        List<Country> countryList = page.toList();
 //        return countryList;
-//    }
-//    @GetMapping("/export/excel")
-//    public void exportToExcel(HttpServletResponse response) throws IOException {
-//        response.setContentType("application/octet-stream");
-//        String headerKey = "Content-Disposition";
-//        String headerValue = "attachment; filename=countries" + ".xlsx";
-//        response.setHeader(headerKey, headerValue);
-//        List<Country> countryList = countryRepository.findAll();
-//        PoiServiceExcel poiService = new PoiServiceExcel(countryList);
-//        poiService.export(response);
-//    }
-//    @GetMapping("/export/word")
-//    public void exportToWord(HttpServletResponse response) throws IOException {
-//        String headerKey = "Content-Disposition";
-//        String headerValue = "attachment; filename=countries" + ".doc";
-//        response.setHeader(headerKey, headerValue);
-//        List<Country> countryList =this.countryRepository.findAll();
-//        PoiServiceWord poiServiceWord = new PoiServiceWord(countryList);
-//        poiServiceWord.export(response);
-//    }
+//
 }

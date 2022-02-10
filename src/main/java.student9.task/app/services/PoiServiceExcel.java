@@ -29,8 +29,6 @@ public class PoiServiceExcel {
 
     private void writeHeaderLine(XSSFWorkbook workbook, XSSFSheet sheet) {
         List<? extends EntityModel> ModelList;
-        sheet = workbook.createSheet();
-
         Row row = sheet.createRow(0);
 
         CellStyle style = workbook.createCellStyle();
@@ -84,7 +82,7 @@ public class PoiServiceExcel {
     };
     public void export(HttpServletResponse response) throws IOException {
         XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = null;
+        XSSFSheet sheet = workbook.createSheet();
         writeHeaderLine(workbook, sheet);
         writeDataLines(workbook, sheet);
         ServletOutputStream outputStream = response.getOutputStream();

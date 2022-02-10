@@ -20,22 +20,11 @@ import java.util.Optional;
 public class DistrictController extends BaseAbstractController{
     protected DistrictService districtService;
     @Autowired
-    public DistrictController( DistrictService districtService) {
+    public DistrictController(DistrictService districtService) {
         super(districtService);
         this.districtService = districtService;
     }
 
-    @Override
-    public List<EntityModel> list() {
-        List list = super.list();
-        System.out.println(list.get(0).getClass());
-        return super.list();
-    }
-
-    @Override
-    public Optional getById(Long id) {
-        return super.getById(id);
-    }
 
     @PostMapping
     @JsonView(Views.MainView.class)
@@ -56,24 +45,5 @@ public class DistrictController extends BaseAbstractController{
 //        List<District> countryList = page.toList();
 //        return countryList;
 //    }
-//
-    @GetMapping("/export/excel")
-    public void exportToExcel(HttpServletResponse response) throws IOException {
-        response.setContentType("application/octet-stream");
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=districts" + ".xlsx";
-        response.setHeader(headerKey, headerValue);
-        List<District> districtList = this.baseEntityService.findAll();
-        PoiServiceExcel poiService = new PoiServiceExcel(districtList);
-        poiService.export(response);
-    }
-    @GetMapping("/export/word")
-    public void exportToWord(HttpServletResponse response) throws IOException {
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=districts" + ".doc";
-        response.setHeader(headerKey, headerValue);
-        List<District> districtList =this.districtService.findAll();
-        PoiServiceWord poiServiceWord = new PoiServiceWord(districtList);
-        poiServiceWord.export(response);
-    }
+
 }
