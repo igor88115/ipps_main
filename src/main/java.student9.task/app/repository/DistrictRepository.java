@@ -14,4 +14,7 @@ import java.util.List;
 public interface DistrictRepository extends JpaRepository<District, Long>, MainRepository<District>{
     @Override
     List<District> findByStatus(String status);
+
+    @Override
+    <S extends District> S save(S entity);
 }

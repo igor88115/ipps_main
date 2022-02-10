@@ -12,7 +12,7 @@ import org.springframework.data.repository.RepositoryDefinition;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+import java.util.Optional;
 
 
 @NoRepositoryBean
@@ -23,4 +23,7 @@ public interface MainRepository <T extends EntityModel> extends JpaRepository<T,
 
     @Override
     <S extends T> S save(S entity);
+
+    @Override
+    Optional<T> findById(Long aLong);
 }

@@ -2,12 +2,13 @@ package app.controller;
 
 import app.models.District;
 import app.models.EntityModel;
+import app.models.Views;
 import app.services.DistrictService;
+import app.services.PoiServiceExcel;
 import app.services.PoiServiceWord;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -26,6 +27,8 @@ public class DistrictController extends BaseAbstractController{
 
     @Override
     public List<EntityModel> list() {
+        List list = super.list();
+        System.out.println(list.get(0).getClass());
         return super.list();
     }
 
@@ -34,44 +37,16 @@ public class DistrictController extends BaseAbstractController{
         return super.getById(id);
     }
 
-    @Override
-    public District create(EntityModel model) {
-        return (District) super.create(model);
+    @PostMapping
+    @JsonView(Views.MainView.class)
+    public EntityModel create(@RequestBody District district){
+        return districtService.create(district);
+    };
+    @PutMapping()
+    public District update(@RequestBody District district) {
+        return (District) districtService.update(district);
     }
-    //    @Override
-//    public Du create(EntityModel model) {
-//        return super.create(model);
-//    }
 
-    //    @PostMapping
-//    @JsonView(Views.MainView.class)
-//    public District create(@RequestBody District district) {
-//        mainService.create(district);
-//        return districtRepository.save(district);
-//    }
-//
-//    @PutMapping("{id}")
-//    public District update(@PathVariable("id") Long id, @RequestBody District district) {
-//        return districtRepository.findById(id)
-//                .map(districtDB -> {
-//                    districtDB.setName(district.getName());
-//                    districtDB.setDescription(district.getDescription());
-//                    mainService.update(districtDB);
-//                    return districtRepository.save(districtDB);
-//                })
-//                .orElseGet(() -> {
-//                    district.setId(id);
-//                    mainService.create(district);
-//                    return districtRepository.save(district);
-//                });
-//    }
-//
-//    @DeleteMapping("{id}")
-//    public void delete(@PathVariable("id") District district) {
-//        mainService.delete(district);
-//        districtRepository.save(district);
-//    }
-//
 //    @GetMapping("/getpage/{pageNo}")
 //    @JsonView(Views.MainView.class)
 //    public List<District> Page(@PathVariable(value = "pageNo") int pageNo) {
@@ -82,16 +57,16 @@ public class DistrictController extends BaseAbstractController{
 //        return countryList;
 //    }
 //
-//    @GetMapping("/export/excel")
-//    public void exportToExcel(HttpServletResponse response) throws IOException {
-//        response.setContentType("application/octet-stream");
-//        String headerKey = "Content-Disposition";
-//        String headerValue = "attachment; filename=districts" + ".xlsx";
-//        response.setHeader(headerKey, headerValue);
-//        List<District> districtList = this.districtRepository.findAll();
-//        PoiServiceExcel poiService = new PoiServiceExcel(districtList);
-//        poiService.export(response);
-//    }
+    @GetMapping("/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=districts" + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+        List<District> districtList = this.baseEntityService.findAll();
+        PoiServiceExcel poiService = new PoiServiceExcel(districtList);
+        poiService.export(response);
+    }
     @GetMapping("/export/word")
     public void exportToWord(HttpServletResponse response) throws IOException {
         String headerKey = "Content-Disposition";

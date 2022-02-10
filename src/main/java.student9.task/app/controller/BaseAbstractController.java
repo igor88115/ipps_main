@@ -12,6 +12,7 @@ public class BaseAbstractController<T extends EntityModel, S extends EntityModel
 
     public BaseAbstractController(S baseEntityService) {
         this.baseEntityService = baseEntityService;
+
     }
 
     public List<EntityModel> list() {
@@ -23,9 +24,7 @@ public class BaseAbstractController<T extends EntityModel, S extends EntityModel
     }
 
     @Override
-    public <T extends EntityModel> T create(T model) {
-        System.out.println(model.getName());
-        System.out.println(model.getClass());
-        return (T) this.baseEntityService.create(model);
+    public void delete(Long id) {
+        this.baseEntityService.delete(id);
     }
 }
