@@ -2,6 +2,8 @@ package app.controller;
 
 import app.models.EntityModel;
 import app.services.EntityModelService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,7 +19,7 @@ public class BaseAbstractController<T extends EntityModel, S extends EntityModel
 
     }
 
-    public List<EntityModel> list() {
+    public List<T> list() {
         return this.baseEntityService.findAll();
     }
 
@@ -39,4 +41,19 @@ public class BaseAbstractController<T extends EntityModel, S extends EntityModel
     public void exportToWord(HttpServletResponse response) throws IOException {
         this.baseEntityService.exportToWord(response);
     }
+
+    @Override
+    public Page<EntityModel> findPaginated(Pageable pageable) {
+        return this.baseEntityService.findPages(pageable);
+    }
+
+//    @PostMapping
+//    public EntityModel create(T model) {
+//        return this.baseEntityService.create(model);
+//    }
+//
+//    @PutMapping()
+//    public EntityModel update(T model) {
+//        return this.baseEntityService.update(model);
+//    }
 }
