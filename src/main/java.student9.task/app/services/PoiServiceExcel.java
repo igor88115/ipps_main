@@ -18,17 +18,10 @@ import java.util.List;
 
 @Service
 public class PoiServiceExcel {
-
-
-    private final List<? extends EntityModel> ModelList;
-
-    public PoiServiceExcel(List<? extends EntityModel> listCountry) {
-        this.ModelList = listCountry;
+    public PoiServiceExcel() {
     }
 
-
     private void writeHeaderLine(XSSFWorkbook workbook, XSSFSheet sheet) {
-        List<? extends EntityModel> ModelList;
         Row row = sheet.createRow(0);
 
         CellStyle style = workbook.createCellStyle();
@@ -62,7 +55,7 @@ public class PoiServiceExcel {
     }
 
 
-    private void writeDataLines(XSSFWorkbook workbook, XSSFSheet sheet) {
+    private void writeDataLines(XSSFWorkbook workbook, XSSFSheet sheet, List<? extends EntityModel> modelList) {
         int rowCount = 1;
 
         CellStyle style = workbook.createCellStyle();
@@ -70,25 +63,24 @@ public class PoiServiceExcel {
         font.setFontHeight(14);
         style.setFont(font);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-        for (EntityModel model : ModelList) {
+        for (EntityModel model : modelList) {
             Row row = sheet.createRow(rowCount++);
             int columnCount = 0;
             createCell(row, columnCount++, model.getName(), style, sheet);
             createCell(row, columnCount++, model.getDescription(), style, sheet);
-            createCell(row, columnCount++, dateFormat.format(model.getDate_create()), style, sheet);
-            createCell(row, columnCount++, dateFormat.format(model.getDate_modificate()), style, sheet);
+            createCell(row, columnCount++, dateFormat.format(model.getDateCreate()), style, sheet);
+            createCell(row, columnCount++, dateFormat.format(model.getDateModificate()), style, sheet);
             createCell(row, columnCount++, model.getId().intValue(), style, sheet);
         }
     };
-    public void export(HttpServletResponse response) throws IOException {
+    public void export(HttpServletResponse response,List<? extends EntityModel> modelList) throws IOException {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet();
         writeHeaderLine(workbook, sheet);
-        writeDataLines(workbook, sheet);
+        writeDataLines(workbook, sheet, modelList);
         ServletOutputStream outputStream = response.getOutputStream();
         workbook.write(outputStream);
         workbook.close();
         outputStream.close();
-
     }
 }

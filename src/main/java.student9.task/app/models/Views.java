@@ -5,4 +5,6 @@ public final class Views {
 
     public interface MainView extends Id {}
 
+    public interface NameView{}
+
 }
