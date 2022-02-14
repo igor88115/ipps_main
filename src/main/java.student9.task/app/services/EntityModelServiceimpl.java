@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class EntityModelService <S extends MainRepository, T extends EntityModel>{
+public class EntityModelServiceimpl <S extends MainRepository, T extends EntityModel>{
 
     protected S mainRepository;
-    public EntityModelService(S mainRepository) {
+    public EntityModelServiceimpl(S mainRepository) {
         this.mainRepository = mainRepository;
     }
 

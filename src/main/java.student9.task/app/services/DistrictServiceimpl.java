@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DistrictService extends EntityModelService{
+public class DistrictServiceimpl extends EntityModelService{
     private DistrictRepository districtRepository;
     private District district;
-    public DistrictService(DistrictRepository districtRepository) {
+    public DistrictServiceimpl(DistrictRepository districtRepository) {
         super(districtRepository);
         this.districtRepository = districtRepository;
     }

@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RegionService extends EntityModelService {
+public class RegionServiceimpl extends EntityModelService implements RegionService{
     private RegionRepository regionRepository;
     private Region region;
 
-    public RegionService(RegionRepository regionRepository) {
+    public RegionServiceimpl(RegionRepository regionRepository) {
         super(regionRepository);
         this.regionRepository = regionRepository;
     }
