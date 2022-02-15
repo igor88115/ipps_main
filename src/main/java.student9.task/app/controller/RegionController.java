@@ -5,6 +5,7 @@ import app.models.*;
 import app.services.RegionService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,5 +24,5 @@ public class RegionController extends BaseAbstractController<Region,RegionServic
 
     @JsonView(Views.NameView.class)
     @GetMapping("/getdistricts/{id}")
-    public List<District> getLocalities(@PathVariable("id") Long id){return this.regionService.getDistricts(id);}
+    public ResponseEntity<List<District>> getLocalities(@PathVariable("id") Long id){return this.regionService.getDistricts(id);}
 }

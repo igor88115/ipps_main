@@ -5,6 +5,7 @@ import app.models.Views;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -15,31 +16,27 @@ import java.util.Optional;
 public interface BaseController<T extends EntityModel> {
     @JsonView(Views.MainView.class)
     @GetMapping
-    public List list();
+    public ResponseEntity<List<T>> list(@RequestParam(required = false) String name);
+
     @GetMapping("{id}")
-    public Optional getById(@PathVariable("id") Long id);
+    public ResponseEntity<Optional<T>> getById(@PathVariable("id") Long id);
 
     @DeleteMapping("{id}")
-    public void delete(@PathVariable("id") Long id);
+    public ResponseEntity delete(@PathVariable("id") Long id);
 
     @GetMapping("/export/excel")
-    public void exportToExcel(HttpServletResponse response) throws IOException;
+    public ResponseEntity<?> exportToExcel(HttpServletResponse response) throws IOException;
 
     @GetMapping("/export/word")
-    public void exportToWord(HttpServletResponse response) throws IOException;
+    public ResponseEntity<?> exportToWord(HttpServletResponse response) throws IOException;
+
     @GetMapping("page")
-    public Page<T> findPaginated(Pageable p);
+    public ResponseEntity<Page<T>> findPaginated(Pageable p);
+
     @PostMapping
     Object create(@RequestBody T model);
+
     @PutMapping
     Object update(@RequestBody T model);
-
-
-//    @PostMapping
-//    public T create(@RequestBody T model);
-//
-//    @PutMapping()
-//    public T update(@RequestBody T model);
-
 
 }

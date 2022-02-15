@@ -1,85 +1,30 @@
 package app.services;
 
-import app.models.District;
+
 import app.models.EntityModel;
 import app.repository.MainRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
+public interface EntityModelService <S extends MainRepository, T extends EntityModel>{
+    ResponseEntity findAll(String name);
 
-public class EntityModelService <S extends MainRepository> implements EntityModelSerice{
+    ResponseEntity<Optional> findById(Long id);
 
-    protected S mainRepository;
+    ResponseEntity create(EntityModel model);
 
+    <T extends EntityModel> ResponseEntity<T> update(T model);
 
-    public EntityModelService(S mainRepository) {
-        this.mainRepository = mainRepository;
-    }
+    ResponseEntity delete(Long id);
 
-    public <T extends EntityModel> List<T> findAll() {
-        return mainRepository.findAll();
-    }
+    <T2 extends EntityModel > ResponseEntity<?> exportToExcel(HttpServletResponse response) throws IOException;
 
-    public Optional findById(Long id) {
-        return mainRepository.findById(id);
-    }
+    <T2 extends EntityModel > ResponseEntity<?> exportToWord(HttpServletResponse response) throws IOException;
 
-
-    public <T extends EntityModel> T create(T model) {
-        Date date = new Date();
-        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-        model.setDateCreate(sqlDate);
-        model.setDateModificate(sqlDate);
-        model.setStatus("good");
-        System.out.println(model.getClass());
-        return (T) mainRepository.save(model);
-    }
-
-    public <T extends EntityModel> T update(T model) {
-        Optional<T> modelDb = mainRepository.findById(model.getId());
-        Date date = new Date();
-        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-        if (modelDb.isPresent() && model.getStatus()!="deleted"){
-            modelDb.get().setName(model.getName());
-            modelDb.get().setDescription(model.getDescription());
-            modelDb.get().setDateModificate(sqlDate);
-            return (T) mainRepository.save(modelDb.get());
-        }else if(modelDb.get().getStatus()!="deleted"){
-            EntityModelService entityModelService = new EntityModelService(this.mainRepository);
-            return (T) entityModelService.create(model);
-        }
-    return null;}
-    public <T extends EntityModel> void delete(Long id) {
-        Optional<T> model = mainRepository.findById(id);
-        Date date = new Date();
-        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-        model.get().setStatus("deleted");
-        model.get().setDateRemove(sqlDate);
-        mainRepository.save(model.get());
-    }
-    public  <T extends EntityModel> void exportToExcel(HttpServletResponse response) throws IOException {
-        response.setContentType("application/octet-stream");
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=entity" + ".xlsx";
-        response.setHeader(headerKey, headerValue);
-        List<T> modelList = mainRepository.findAll();
-        PoiServiceExcel poiService = new PoiServiceExcel(modelList);
-        poiService.export(response);
-    }
-
-    public <T extends EntityModel> void exportToWord(HttpServletResponse response) throws IOException {
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=entity" + ".doc";
-        response.setHeader(headerKey, headerValue);
-        List<T> districtList =mainRepository.findAll();
-        PoiServiceWord poiServiceWord = new PoiServiceWord(districtList);
-        poiServiceWord.export(response);
-
-
-    }
+    ResponseEntity<Page> findPages (Pageable pageable);
 }

@@ -2,6 +2,7 @@ package app.models;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Date;

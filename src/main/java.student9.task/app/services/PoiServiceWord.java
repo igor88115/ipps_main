@@ -16,8 +16,7 @@ import java.util.List;
 
 @Service
 public class PoiServiceWord{
-    public PoiServiceWord() {
-    }
+
 
     private void createCell(XWPFTableRow row, int pos, Object value){
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");

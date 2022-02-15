@@ -2,8 +2,10 @@ package app.controller;
 
 import app.models.EntityModel;
 import app.services.EntityModelService;
+import app.services.EntityModelServiceimpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,41 +20,45 @@ public class BaseAbstractController<T extends EntityModel, S extends EntityModel
     public BaseAbstractController(S baseEntityService) {
         this.baseEntityService = baseEntityService;
     }
-
-    public List<T> list() {
-        return this.baseEntityService.findAll();
+    @Override
+    public ResponseEntity<List<T>> list(String name) {
+        return this.baseEntityService.findAll(name);
     }
 
-    public Optional getById(Long id) {
+
+    @Override
+    public ResponseEntity<Optional<T>> getById(Long id) {
         return this.baseEntityService.findById(id);
     }
 
     @Override
-    public void delete(Long id) {
-        this.baseEntityService.delete(id);
+    public ResponseEntity delete(Long id) {
+        return this.baseEntityService.delete(id);
+    }
+
+
+
+    @Override
+    public ResponseEntity<?> exportToExcel(HttpServletResponse response) throws IOException {
+        return this.baseEntityService.exportToExcel(response);
     }
 
     @Override
-    public void exportToExcel(HttpServletResponse response) throws IOException {
-        this.baseEntityService.exportToExcel(response);
+    public ResponseEntity<?> exportToWord(HttpServletResponse response) throws IOException {
+        return  this.baseEntityService.exportToWord(response);
     }
 
     @Override
-    public void exportToWord(HttpServletResponse response) throws IOException {
-        this.baseEntityService.exportToWord(response);
-    }
-
-    @Override
-    public Page<T> findPaginated(Pageable pageable) {
+    public ResponseEntity<Page<T>> findPaginated(Pageable pageable) {
         return this.baseEntityService.findPages(pageable);
     }
 
     @Override
-    public Object create(@RequestBody T model) {
+    public ResponseEntity<T> create(@RequestBody T model) {
         return baseEntityService.create(model);
     }
     @Override
-    public Object update(@RequestBody T model) {
+    public ResponseEntity<T> update(@RequestBody T model) {
         return baseEntityService.update(model);
     }
 

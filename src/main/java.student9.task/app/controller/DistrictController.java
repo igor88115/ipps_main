@@ -1,12 +1,13 @@
 package app.controller;
 
 import app.models.District;
-import app.models.EntityModel;
 import app.models.Locality;
 import app.models.Views;
 import app.services.DistrictService;
+import app.services.DistrictServiceimpl;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,6 @@ public class DistrictController extends BaseAbstractController<District, Distric
 
     @JsonView(Views.NameView.class)
     @GetMapping("/getlocalities/{id}")
-    public List<Locality> getLocalities(@PathVariable("id") Long id){return districtService.getLocalities(id);}
+    public ResponseEntity<List<Locality>> getLocalities(@PathVariable("id") Long id){return districtService.getLocalities(id);}
 
 }
