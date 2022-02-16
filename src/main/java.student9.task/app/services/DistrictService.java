@@ -1,18 +1,13 @@
 package app.services;
 
+
 import app.models.District;
-import app.models.EntityModel;
+import app.models.Locality;
 import app.repository.DistrictRepository;
-import org.springframework.stereotype.Service;
+import org.springframework.http.ResponseEntity;
 
-@Service
-public class DistrictService extends EntityModelService{
-    private DistrictRepository districtRepository;
-    private District district;
-    public DistrictService(DistrictRepository districtRepository) {
-        super(districtRepository);
+import java.util.List;
 
-    }
-
-
+public interface DistrictService extends EntityModelService<DistrictRepository, District>{
+    List<Locality> getLocalities(Long id);
 }

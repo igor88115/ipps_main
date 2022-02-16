@@ -6,12 +6,9 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class LocalityService extends EntityModelService {
-    private LocalityRepository localityRepositoryy;
-    private Locality locality;
+public class LocalityServiceimpl extends EntityModelServiceimpl<LocalityRepository, Locality>implements LocalityService{
 
-    public LocalityService(LocalityRepository localityRepository) {
-        super(localityRepository);
-
+    public LocalityServiceimpl(LocalityRepository localityRepositoryy) {
+        super(localityRepositoryy);
     }
 }

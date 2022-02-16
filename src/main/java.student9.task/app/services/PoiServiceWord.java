@@ -16,16 +16,11 @@ import java.util.List;
 
 @Service
 public class PoiServiceWord{
-    public PoiServiceWord() {
-    }
+
 
     private void createCell(XWPFTableRow row, int pos, Object value){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-        if (value == null){value="no Value";
-        } else if (value instanceof Date) {
-            value = dateFormat.format(value);
-        } else if (value instanceof Long) {
-            value = ((Long) value).toString();}
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        if (value == null){value="no Value";}
         row.getCell(pos).setText((String) value);
     }
 
@@ -35,7 +30,7 @@ public class PoiServiceWord{
         table.getRow(rownumber).getCell(0).setText("Name");
         table.getRow(rownumber).getCell(1).setText("Description");
         table.getRow(rownumber).getCell(2).setText("creation_date");
-        table.getRow(rownumber).getCell(3).setText("modeification_date");
+        table.getRow(rownumber).getCell(3).setText("modification_date");
         table.getRow(rownumber).getCell(4).setText("ID");
 
         for (EntityModel model : entityList) {
@@ -49,13 +44,12 @@ public class PoiServiceWord{
         }
     };
 
-    public void export(HttpServletResponse response, List<? extends EntityModel> entityList) throws IOException {
-        XWPFDocument document = new XWPFDocument();
-        writeDataLines(document, entityList);
-        ServletOutputStream outputStream = response.getOutputStream();
-        document.write(outputStream);
-        document.close();
-        outputStream.close();
-
+    public void export(HttpServletResponse response, List<? extends EntityModel> entityList){
+        try(XWPFDocument document = new XWPFDocument();){
+            writeDataLines(document, entityList);
+            document.write(response.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

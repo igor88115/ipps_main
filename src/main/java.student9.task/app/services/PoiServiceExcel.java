@@ -18,8 +18,6 @@ import java.util.List;
 
 @Service
 public class PoiServiceExcel {
-    public PoiServiceExcel() {
-    }
 
     private void writeHeaderLine(XSSFWorkbook workbook, XSSFSheet sheet) {
         Row row = sheet.createRow(0);
@@ -44,13 +42,7 @@ public class PoiServiceExcel {
         sheet.autoSizeColumn(columnCount);
         Cell cell = row.createCell(columnCount);
         if (value == null){value="no Value";}
-        if (value instanceof Integer) {
-            cell.setCellValue((Integer) value);
-        } else if (value instanceof Boolean) {
-            cell.setCellValue((Boolean) value);
-        }else {
             cell.setCellValue((String) value);
-        }
         cell.setCellStyle(style);
     }
 
@@ -70,11 +62,11 @@ public class PoiServiceExcel {
             createCell(row, columnCount++, model.getDescription(), style, sheet);
             createCell(row, columnCount++, dateFormat.format(model.getDateCreate()), style, sheet);
             createCell(row, columnCount++, dateFormat.format(model.getDateModificate()), style, sheet);
-            createCell(row, columnCount++, model.getId().intValue(), style, sheet);
+            createCell(row, columnCount++, String.valueOf(model.getId()), style, sheet);
         }
     };
     public void export(HttpServletResponse response,List<? extends EntityModel> modelList) throws IOException {
-        XSSFWorkbook workbook = new XSSFWorkbook();
+        try(XSSFWorkbook workbook = new XSSFWorkbook();){
         XSSFSheet sheet = workbook.createSheet();
         writeHeaderLine(workbook, sheet);
         writeDataLines(workbook, sheet, modelList);
