@@ -2,56 +2,59 @@ package app.services;
 
 import app.models.EntityModel;
 import app.repository.MainRepository;
-import org.hibernate.*;
-import org.hibernate.graph.RootGraph;
-import org.hibernate.procedure.ProcedureCall;
-import org.hibernate.query.NativeQuery;
-import org.hibernate.stat.SessionStatistics;
+import org.hibernate.Filter;
+import org.hibernate.Session;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.FlushModeType;
-import javax.persistence.LockModeType;
-import javax.persistence.StoredProcedureQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.metamodel.Metamodel;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.Serializable;
-import java.sql.Connection;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 
 public class EntityModelServiceimpl <S extends MainRepository, T extends EntityModel> implements EntityModelService<S, T>{
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     protected S mainRepository;
 
     public EntityModelServiceimpl(S mainRepository) {
         this.mainRepository = mainRepository;
     }
+
+
+
+
     @Override
-    public ResponseEntity<List<T>> findAll(String name) {
-        if (name != null){
-            Session session = new 
-            Filter
-            mainRepository.findAll().
+    public List<T> findAll(String name) {
+        List<T> result;
+        if (name != null) {
+            Filter filter = entityManager.unwrap(Session.class).enableFilter("nameFilter");
+            filter.setParameter("name", name + "%");
+            result = this.mainRepository.findAll();
+            entityManager.unwrap(Session.class).disableFilter("nameFilter");
+        }else {
+            result = this.mainRepository.findAll();
         }
-        return ResponseEntity.status(HttpStatus.FOUND).body(mainRepository.findAll());
+        return result;
     }
+
+
+
+
+
     @Override
-    public ResponseEntity<Optional> findById(Long id) {
+    public ResponseEntity<Optional> findById(long id) {
         if (mainRepository.findById(id).isPresent())
             return ResponseEntity.status(HttpStatus.FOUND).body(mainRepository.findById(id));
-        else return new ResponseEntity(HttpStatus.NOT_FOUND);
+        else return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @Override
@@ -78,11 +81,11 @@ public class EntityModelServiceimpl <S extends MainRepository, T extends EntityM
             modelDb.get().setDateModificate(date);
             ResponseEntity<T> body = ResponseEntity.status(HttpStatus.OK).body((T) this.mainRepository.save(modelDb.get()));
             return body;
-        } else return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } else return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @Override
-    public ResponseEntity delete(Long id){
+    public ResponseEntity delete(long id){
         Optional<T> model = mainRepository.findById(id);
         if (model.isPresent()) {
             Date date = new Date();
@@ -91,7 +94,7 @@ public class EntityModelServiceimpl <S extends MainRepository, T extends EntityM
             this.mainRepository.save(model.get());
             return new ResponseEntity(HttpStatus.OK);
         } else {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
     }
 
@@ -122,6 +125,6 @@ public class EntityModelServiceimpl <S extends MainRepository, T extends EntityM
     public ResponseEntity<Page> findPages(Pageable pageable){
         Page page = this.mainRepository.findByStatus("good", pageable);
         if (page.hasContent()) return ResponseEntity.status(HttpStatus.OK).body(page);
-        else return new ResponseEntity(HttpStatus.NOT_FOUND);
+        else return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

@@ -9,22 +9,23 @@ import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 public interface EntityModelService <S extends MainRepository, T extends EntityModel>{
-    ResponseEntity findAll(String name);
+    List<T> findAll(String name);
 
-    ResponseEntity<Optional> findById(Long id);
+    ResponseEntity<Optional> findById(long id);
 
-    ResponseEntity create(EntityModel model);
+    ResponseEntity<T> create(EntityModel model);
 
-    <T extends EntityModel> ResponseEntity<T> update(T model);
+    <T2 extends EntityModel> ResponseEntity<T2> update(T2 model);
 
-    ResponseEntity delete(Long id);
+    ResponseEntity delete(long id);
 
     <T2 extends EntityModel > ResponseEntity<?> exportToExcel(HttpServletResponse response) throws IOException;
 
     <T2 extends EntityModel > ResponseEntity<?> exportToWord(HttpServletResponse response) throws IOException;
 
-    ResponseEntity<Page> findPages (Pageable pageable);
+    ResponseEntity<Page> findPages(Pageable pageable);
 }

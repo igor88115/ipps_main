@@ -9,5 +9,5 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface DistrictService extends EntityModelService<DistrictRepository, District>{
-    ResponseEntity<List<Locality>> getLocalities(Long id);
+    List<Locality> getLocalities(long id);
 }

@@ -1,21 +1,29 @@
 package app.models;
 
+import app.util.Views;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Date;
 
 
-//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+
 @MappedSuperclass
 @Data
+@FilterDef(
+        name = "nameFilter",
+        parameters = @ParamDef(name = "name", type = "string")
+)
 public class EntityModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonView(Views.MainView.class)
-    protected Long id;
+    @Where(clause = "status !='deleted'")
+    protected long id;
     @JsonView({Views.MainView.class, Views.NameView.class})
     protected String name;
     @JsonView(Views.MainView.class)

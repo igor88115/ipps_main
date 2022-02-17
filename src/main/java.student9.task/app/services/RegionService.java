@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface RegionService extends EntityModelService<RegionRepository, Region>{
 
-    ResponseEntity<List<District>> getDistricts(Long id);
+    ResponseEntity<List<District>> getDistricts(long id);
 }

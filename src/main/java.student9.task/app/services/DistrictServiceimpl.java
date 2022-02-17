@@ -11,17 +11,13 @@ import java.util.List;
 
 @Service
 public class DistrictServiceimpl extends EntityModelServiceimpl<DistrictRepository, District> implements DistrictService {
-    private DistrictRepository districtRepository;
 
     public DistrictServiceimpl(DistrictRepository districtRepository) {
         super(districtRepository);
-        this.districtRepository = districtRepository;
     }
     @Override
-    public ResponseEntity<List<Locality>> getLocalities(Long id) {
-        List<Locality> localities = this.districtRepository.getLocalities(id);
-        if (localities.isEmpty() == false) return ResponseEntity.status(HttpStatus.OK).body(localities);
-        else return new ResponseEntity(HttpStatus.NOT_FOUND);
+    public List<Locality> getLocalities(long id) {
+        return this.mainRepository.getLocalities(id);
 
     }
 }

@@ -3,6 +3,7 @@ package app.models;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -12,11 +13,13 @@ import javax.persistence.*;
 @ToString(of = {"id", "text"})
 @EqualsAndHashCode(of = {"id"})
 @Data
-@Where(clause = "status = 'good'")
+@Where(clause = "status !='deleted'")
+@Filter(
+        name = "nameFilter",
+        condition = "name like :name"
+)
 public class Locality extends EntityModel {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
-    private Long districtId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "districtId")
+    private District districtId;
 }

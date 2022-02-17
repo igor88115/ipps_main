@@ -19,9 +19,9 @@ public class RegionServiceimpl extends EntityModelServiceimpl<RegionRepository, 
         this.regionRepository = regionRepository;
     }
     @Override
-    public ResponseEntity<List<District>> getDistricts(Long id) {
+    public ResponseEntity<List<District>> getDistricts(long id) {
         Optional<Region> region = regionRepository.findByIdAndStatus(id, "good");
         if (region.isPresent()) return ResponseEntity.status(HttpStatus.OK).body(region.get().getDistrictList());
-        else return new ResponseEntity(HttpStatus.NOT_FOUND);
+        else return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

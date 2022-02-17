@@ -1,41 +1,52 @@
 package app.controller;
 
+import app.models.DTOModel;
 import app.models.EntityModel;
 import app.services.EntityModelService;
-import app.services.EntityModelServiceimpl;
+import app.services.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class BaseAbstractController<T extends EntityModel, S extends EntityModelService> implements BaseController<T> {
-    T entity;
+
     S baseEntityService;
 
     public BaseAbstractController(S baseEntityService) {
         this.baseEntityService = baseEntityService;
     }
+
     @Override
-    public ResponseEntity<List<T>> list(String name) {
-        return this.baseEntityService.findAll(name);
+    public ResponseEntity<List<DTOModel>> list(String name) {
+        List<T> result = this.baseEntityService.findAll(name);
+        List<DTOModel> dtoModelList = new ArrayList<DTOModel>();
+        for(T entity:result){
+            dtoModelList.add(Mapper.toDto(entity));
+        }
+        if(dtoModelList == null )return new ResponseEntity(HttpStatus.NO_CONTENT);
+
+        return ResponseEntity.status(HttpStatus.OK).body(dtoModelList);
     }
 
 
     @Override
-    public ResponseEntity<Optional<T>> getById(Long id) {
-        return this.baseEntityService.findById(id);
+    public ResponseEntity <Optional<T>> getById(Optional<T> entity) {
+        return ResponseEntity.status(HttpStatus.OK).body(entity);
     }
+
 
     @Override
     public ResponseEntity delete(Long id) {
         return this.baseEntityService.delete(id);
     }
-
 
 
     @Override
@@ -45,7 +56,7 @@ public class BaseAbstractController<T extends EntityModel, S extends EntityModel
 
     @Override
     public ResponseEntity<?> exportToWord(HttpServletResponse response) throws IOException {
-        return  this.baseEntityService.exportToWord(response);
+        return this.baseEntityService.exportToWord(response);
     }
 
     @Override
@@ -57,6 +68,7 @@ public class BaseAbstractController<T extends EntityModel, S extends EntityModel
     public ResponseEntity<T> create(@RequestBody T model) {
         return baseEntityService.create(model);
     }
+
     @Override
     public ResponseEntity<T> update(@RequestBody T model) {
         return baseEntityService.update(model);

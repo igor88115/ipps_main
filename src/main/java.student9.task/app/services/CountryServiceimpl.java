@@ -11,17 +11,16 @@ import java.util.List;
 
 @Service
 public class CountryServiceimpl extends EntityModelServiceimpl<CountryRepository, Country> implements CountryService{
-    private CountryRepository countryRepository;
+
 
     public CountryServiceimpl(CountryRepository countryRepository) {
         super(countryRepository);
-        this.countryRepository = countryRepository;
     }
 
     @Override
-    public ResponseEntity<List<Region>> getRegions(Long id) {
-        List<Region> regions = this.countryRepository.getRegions(id);
-        if (regions.isEmpty() == false) return ResponseEntity.status(HttpStatus.OK).body(regions);
-        else return new ResponseEntity(HttpStatus.NOT_FOUND);
+    public ResponseEntity<List<Region>> getRegions(long id) {
+        List<Region> regions = this.mainRepository.getRegions(id);
+        if (regions.isEmpty()) return new ResponseEntity(HttpStatus.NO_CONTENT);
+        else return ResponseEntity.status(HttpStatus.OK).body(regions);
     }
 }

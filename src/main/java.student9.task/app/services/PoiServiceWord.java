@@ -19,13 +19,8 @@ public class PoiServiceWord{
 
 
     private void createCell(XWPFTableRow row, int pos, Object value){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-        if (value == null){value="no Value";
-        } else if (value instanceof Date) {
-            value = dateFormat.format(value);
-        } else if (value instanceof Long) {
-            value = ((Long) value).toString();}
-        row.getCell(pos).setText((String) value);
+        if (value == null){value="no Value";}
+        row.getCell(pos).setText(String.valueOf(value));
     }
 
     private void writeDataLines(XWPFDocument document, List<? extends EntityModel> entityList) {
@@ -34,27 +29,26 @@ public class PoiServiceWord{
         table.getRow(rownumber).getCell(0).setText("Name");
         table.getRow(rownumber).getCell(1).setText("Description");
         table.getRow(rownumber).getCell(2).setText("creation_date");
-        table.getRow(rownumber).getCell(3).setText("modeification_date");
+        table.getRow(rownumber).getCell(3).setText("modification_date");
         table.getRow(rownumber).getCell(4).setText("ID");
 
         for (EntityModel model : entityList) {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             rownumber ++;
             XWPFTableRow row = table.getRow(rownumber);
             createCell(row, 0, model.getName());
             createCell(row, 1, model.getDescription());
-            createCell(row, 2, model.getDateCreate());
-            createCell(row, 3, model.getDateModificate());
-            createCell(row, 4, model.getId());
+            createCell(row, 2, dateFormat.format(model.getDateCreate()));
+            createCell(row, 3, dateFormat.format(model.getDateModificate()));
+            createCell(row, 4, String.valueOf(model.getId()));
         }
     };
 
-    public void export(HttpServletResponse response, List<? extends EntityModel> entityList) throws IOException {
-        XWPFDocument document = new XWPFDocument();
-        writeDataLines(document, entityList);
-        ServletOutputStream outputStream = response.getOutputStream();
-        document.write(outputStream);
-        document.close();
-        outputStream.close();
-
+    public void export(HttpServletResponse response, List<? extends EntityModel> entityList)throws IOException{
+        try(XWPFDocument document = new XWPFDocument();
+            ServletOutputStream outputStream = response.getOutputStream();){
+            writeDataLines(document, entityList);
+            document.write(outputStream);
+        }
     }
 }
