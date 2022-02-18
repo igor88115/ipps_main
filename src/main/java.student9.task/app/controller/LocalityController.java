@@ -1,12 +1,11 @@
 package app.controller;
 
 
+import app.models.DTOModel;
 import app.models.District;
 import app.models.Locality;
-import app.models.Region;
-import app.models.Views;
 import app.services.LocalityService;
-import com.fasterxml.jackson.annotation.JsonView;
+import app.services.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -26,16 +26,16 @@ public class LocalityController extends BaseAbstractController<Locality, Localit
     @Autowired
     public LocalityController(LocalityService localityService) {
         super(localityService);
-        this.localityService = localityService;
     }
-    @JsonView(Views.NameView.class)
-    @GetMapping("/by_distict/{entity}")
-    public ResponseEntity<List<Locality>> getLocalities(@PathVariable Optional<District> entity) {
-        if (entity.isPresent()) {
+
+    @GetMapping("/by_district/{entity}")
+    public ResponseEntity<List<DTOModel>> getLocalities(@PathVariable Optional<District> entity) {
+        if (entity.isPresent() && !Objects.equals(entity.get().getStatus(), "deleted")) {
             List<Locality> localityList = entity.get().getLocalityList();
-            return ResponseEntity.status(HttpStatus.FOUND).body(localityList);
+            List<DTOModel> dtoModels = Mapper.listToDTO(localityList);
+            return ResponseEntity.status(HttpStatus.OK).body(dtoModels);
         }
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
 }

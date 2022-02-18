@@ -1,9 +1,11 @@
 package app.controller;
 
 
-import app.models.*;
+import app.models.Country;
+import app.models.DTOModel;
+import app.models.Region;
+import app.services.Mapper;
 import app.services.RegionService;
-import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -22,12 +25,12 @@ public class RegionController extends BaseAbstractController<Region,RegionServic
         super(regionService);
     }
 
-    @JsonView(Views.NameView.class)
     @GetMapping("/by_country/{entity}")
-    public ResponseEntity<List<Region>> getLocalities(@PathVariable Optional<Country> entity) {
-        if (entity.isPresent()) {
+    public ResponseEntity<List<DTOModel>> getLocalities(@PathVariable Optional<Country> entity) {
+        if (entity.isPresent() && !Objects.equals(entity.get().getStatus(), "deleted")) {
             List<Region> regionList = entity.get().getRegionList();
-            return ResponseEntity.status(HttpStatus.FOUND).body(regionList);
+            List<DTOModel> dtoModels = Mapper.listToDTO(regionList);
+            return ResponseEntity.status(HttpStatus.OK).body(dtoModels);
         }
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

@@ -10,5 +10,4 @@ import java.util.List;
 
 public interface CountryService extends EntityModelService<CountryRepository, Country>{
 
-    ResponseEntity<List<Region>> getRegions(Long id);
 }

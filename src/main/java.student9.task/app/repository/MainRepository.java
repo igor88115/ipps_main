@@ -1,7 +1,7 @@
 package app.repository;
 
+import app.models.DTOModel;
 import app.models.EntityModel;
-import app.models.Region;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,13 +15,15 @@ import java.util.Optional;
 
 @NoRepositoryBean
 @Qualifier("main")
-public interface MainRepository <T extends EntityModel> extends JpaRepository<T, Long>, PagingAndSortingRepository<T, Long> {
+public interface MainRepository <T extends EntityModel> extends JpaRepository<T, Long> {
     List<T> findAll();
     List<T> findByStatus(String status);
+    Page<DTOModel> findPagesByStatus(String status, Pageable pageable);
     Page<T> findByStatus(String status, Pageable pageable);
-    List<T> findByNameStartsWith(String name);
     Optional<T> findByIdAndStatus(long id, String good);
-
     @Override
     <S extends T> S saveAndFlush(S entity);
+
+    @Override
+    T getById(Long aLong);
 }

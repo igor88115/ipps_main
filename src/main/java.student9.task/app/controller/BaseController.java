@@ -1,8 +1,7 @@
 package app.controller;
 
+import app.models.DTOModel;
 import app.models.EntityModel;
-import app.models.Views;
-import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -14,18 +13,16 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BaseController<T extends EntityModel> {
-    @GetMapping("/filter")
-    Iterable<T> findCommentWithEmail(@RequestParam(required = false) String name);
 
-    @JsonView(Views.MainView.class)
     @GetMapping
-    public ResponseEntity<List<T>> list(@RequestParam(required = false) String name);
+    ResponseEntity<List<DTOModel>> list(@RequestParam(required = false, defaultValue = "") String query);
 
-    @GetMapping("{id}")
-    public ResponseEntity<Optional<T>> getById(@PathVariable("id") Long id);
+    @GetMapping("{entity}")
+    public ResponseEntity<DTOModel> getById(@PathVariable Optional<T> entity);
 
-    @DeleteMapping("{id}")
-    public ResponseEntity delete(@PathVariable("id") Long id);
+
+    @DeleteMapping("{entity}")
+    public ResponseEntity delete(@PathVariable Optional<T> entity);
 
     @GetMapping("/export/excel")
     public ResponseEntity<?> exportToExcel(HttpServletResponse response) throws IOException;
@@ -37,9 +34,9 @@ public interface BaseController<T extends EntityModel> {
     public ResponseEntity<Page<T>> findPaginated(Pageable p);
 
     @PostMapping
-    ResponseEntity<T> create(@RequestBody T model);
+    ResponseEntity<DTOModel> create(@RequestBody T model);
 
     @PutMapping
-    ResponseEntity<T> update(@RequestBody T model);
+    ResponseEntity<DTOModel> update(@RequestBody T model);
 
 }
