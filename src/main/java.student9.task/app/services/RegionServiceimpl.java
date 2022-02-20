@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RegionServiceimpl extends EntityModelServiceimpl<RegionRepository, Region> implements RegionService{
-    private RegionRepository regionRepository;
 
     public RegionServiceimpl(RegionRepository regionRepository) {
         super(regionRepository);

@@ -10,9 +10,5 @@ public class DistrictServiceimpl extends EntityModelServiceimpl<DistrictReposito
     public DistrictServiceimpl(DistrictRepository districtRepository) {
         super(districtRepository);
     }
-//    @Override
-//    public List<Locality> getLocalities(long id) {
-//        return this.districtRepository.getLocalities(id);
-//
-//    }
+
 }

@@ -1,7 +1,9 @@
 package app.services;
 
+import app.models.DTOModel;
 import app.models.EntityModel;
 import app.repository.MainRepository;
+import app.util.Status;
 import org.hibernate.Filter;
 import org.hibernate.Session;
 import org.springframework.data.domain.Page;
@@ -21,8 +23,6 @@ import java.util.Optional;
 
 public class EntityModelServiceimpl<S extends MainRepository, T extends EntityModel> implements EntityModelService<S, T> {
 
-
-
     protected S mainRepository;
 
     public EntityModelServiceimpl(S mainRepository) {
@@ -30,48 +30,38 @@ public class EntityModelServiceimpl<S extends MainRepository, T extends EntityMo
     }
 
     @Override
-    public List<T> findAll(String name) {
-        Filter filter = entityManager.unwrap(Session.class).enableFilter("nameFilter");
-        filter.setParameter("name", name + "%");
-        List<T> result = this.mainRepository.findByStatus("good");
-        entityManager.unwrap(Session.class).disableFilter("nameFilter");
-        return result;
+    public List<T> findAll() {
+        return this.mainRepository.findAll();
     }
-
-//    @Override
-//    public ResponseEntity<Optional> findById(long id) {
-//        if (mainRepository.findById(id).isPresent())
-//            return ResponseEntity.status(HttpStatus.OK).body(mainRepository.findById(id));
-//        else return new ResponseEntity(HttpStatus.NO_CONTENT);
-//    }
 
     @Override
     public T create(EntityModel model) {
         Date date = new Date();
         model.setDateCreate(date);
         model.setDateModificate(date);
-        model.setStatus("good");
+        model.setStatus(Status.GOOD.status);
         return (T) this.mainRepository.save(model);
     }
 
     @Override
     public T update(T model) {
-        Optional<T> modelDb = this.mainRepository.findById(model.getId());
-        Date date = new Date();
-        if (modelDb.isPresent() && !Objects.equals(modelDb.get().getStatus(), "deleted")) {
-            if (model.getName() != null) {
-                modelDb.get().setName(model.getName());
-            }
-            modelDb.get().setDateModificate(date);
-            T saved = (T) this.mainRepository.save(modelDb.get());
-            return saved;
-        } else return null;
+//        Optional<T> modelDb = this.mainRepository.findById(model.getId());
+//        Date date = new Date();
+//        if (modelDb.isPresent()) {
+//            if (model.getName() != null) {
+//                modelDb.get().setName(model.getName());
+//            }
+//            modelDb.get().setDateModificate(date);
+//            T saved = (T) this.mainRepository.save(modelDb.get());
+//            return saved;
+//        } else return null;
+        return null;
     }
 
     @Override
     public T delete(Optional<T> entity) {
         Date date = new Date();
-        entity.get().setStatus("deleted");
+        entity.get().setStatus(String.valueOf(Status.DELETED.status));
         entity.get().setDateRemove(date);
         return (T) this.mainRepository.save(entity.get());
     }
@@ -100,6 +90,6 @@ public class EntityModelServiceimpl<S extends MainRepository, T extends EntityMo
 
     @Override
     public Page findPages(Pageable pageable) {
-        return this.mainRepository.findPagesByStatus("good", pageable);
+        return this.mainRepository.findPagesByStatus(Status.GOOD.status, pageable);
     }
 }

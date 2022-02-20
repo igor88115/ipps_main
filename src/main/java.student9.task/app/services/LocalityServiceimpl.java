@@ -11,4 +11,5 @@ public class LocalityServiceimpl extends EntityModelServiceimpl<LocalityReposito
     public LocalityServiceimpl(LocalityRepository localityRepositoryy) {
         super(localityRepositoryy);
     }
+
 }

@@ -18,9 +18,7 @@ import java.util.Optional;
 public interface MainRepository <T extends EntityModel> extends JpaRepository<T, Long> {
     List<T> findAll();
     List<T> findByStatus(String status);
-    Page<DTOModel> findPagesByStatus(String status, Pageable pageable);
-    Page<T> findByStatus(String status, Pageable pageable);
-    Optional<T> findByIdAndStatus(long id, String good);
+    Page findPagesByStatus(String status, Pageable pageable);
     @Override
     <S extends T> S saveAndFlush(S entity);
 

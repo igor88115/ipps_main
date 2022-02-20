@@ -20,16 +20,15 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/district")
 public class DistrictController extends BaseAbstractController<District, DistrictService>{
-    protected DistrictService districtService;
 
-    @Autowired
+
     public DistrictController(DistrictService districtService) {
         super(districtService);
     }
 
     @GetMapping("/by_region/{entity}")
     public ResponseEntity<List<DTOModel>> getLocalities(@PathVariable Optional<Region> entity) {
-        if (entity.isPresent() && !Objects.equals(entity.get().getStatus(), "deleted")) {
+        if (entity.isPresent()) {
             List<District> districtList = entity.get().getDistrictList();
             List<DTOModel> dtoModels = Mapper.listToDTO(districtList);
             return ResponseEntity.status(HttpStatus.OK).body(dtoModels);

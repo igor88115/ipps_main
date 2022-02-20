@@ -25,13 +25,13 @@ public interface BaseController<T extends EntityModel> {
     public ResponseEntity delete(@PathVariable Optional<T> entity);
 
     @GetMapping("/export/excel")
-    public ResponseEntity<?> exportToExcel(HttpServletResponse response) throws IOException;
+    public void exportToExcel(HttpServletResponse response) throws IOException;
 
     @GetMapping("/export/word")
-    public ResponseEntity<?> exportToWord(HttpServletResponse response) throws IOException;
+    public void exportToWord(HttpServletResponse response) throws IOException;
 
     @GetMapping("page")
-    public ResponseEntity<Page<T>> findPaginated(Pageable p);
+    public ResponseEntity<Page> findPaginated(Pageable p);
 
     @PostMapping
     ResponseEntity<DTOModel> create(@RequestBody T model);

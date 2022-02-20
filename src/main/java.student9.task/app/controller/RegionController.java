@@ -6,6 +6,7 @@ import app.models.DTOModel;
 import app.models.Region;
 import app.services.Mapper;
 import app.services.RegionService;
+import app.util.Status;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ public class RegionController extends BaseAbstractController<Region,RegionServic
 
     @GetMapping("/by_country/{entity}")
     public ResponseEntity<List<DTOModel>> getLocalities(@PathVariable Optional<Country> entity) {
-        if (entity.isPresent() && !Objects.equals(entity.get().getStatus(), "deleted")) {
+        if (entity.isPresent() && !Objects.equals(entity.get().getStatus(), Status.DELETED.status)) {
             List<Region> regionList = entity.get().getRegionList();
             List<DTOModel> dtoModels = Mapper.listToDTO(regionList);
             return ResponseEntity.status(HttpStatus.OK).body(dtoModels);

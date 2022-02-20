@@ -12,19 +12,16 @@ public class Mapper {
 
     public static <T extends EntityModel> DTOModel toDto(T entity) {
         long id = entity.getId();
-        String name = entity.getName();
-        String description = entity.getDescription();
         Date dateCreate = entity.getDateCreate();
         Date dateModificate = entity.getDateModificate();
 
-        return new DTOModel(id, name, description, dateCreate, dateModificate);
-    }
+        return null;    }
 
     public static <T extends EntityModel> List<DTOModel> listToDTO(List<T> tList){
         ArrayList<DTOModel> dtoModels = new ArrayList<>();
         for (T entity: tList){
             dtoModels.add(Mapper.toDto(entity));
         }
-        return dtoModels;
+        return null;
     }
 }

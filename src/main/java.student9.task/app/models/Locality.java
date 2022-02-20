@@ -14,13 +14,13 @@ import javax.persistence.*;
 @EqualsAndHashCode(of = {"id"})
 @Data
 @Filter(
-        name = "nameFilter",
-        condition = "name like :name"
+        name = "queryFilter",
+        condition = "name like :query"
 )
+@Where(clause = "status !='deleted'")
 public class Locality extends EntityModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "districtId")
-    @Where(clause = "status !='deleted'")
     private District districtId;
     @Column(length = 200)
     protected String name;

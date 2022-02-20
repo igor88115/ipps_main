@@ -6,6 +6,7 @@ import app.models.District;
 import app.models.Locality;
 import app.services.LocalityService;
 import app.services.Mapper;
+import app.util.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class LocalityController extends BaseAbstractController<Locality, Localit
 
     @GetMapping("/by_district/{entity}")
     public ResponseEntity<List<DTOModel>> getLocalities(@PathVariable Optional<District> entity) {
-        if (entity.isPresent() && !Objects.equals(entity.get().getStatus(), "deleted")) {
+        if (entity.isPresent() && !Objects.equals(entity.get().getStatus(), Status.DELETED.status)) {
             List<Locality> localityList = entity.get().getLocalityList();
             List<DTOModel> dtoModels = Mapper.listToDTO(localityList);
             return ResponseEntity.status(HttpStatus.OK).body(dtoModels);

@@ -1,9 +1,13 @@
 package app.services;
 
+import app.models.DTOEntityModel;
+import app.models.DTOModel;
 import app.models.EntityModel;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletOutputStream;
@@ -22,31 +26,31 @@ public class PoiServiceWord{
         row.getCell(pos).setText(String.valueOf(value));
     }
 
-    private void writeDataLines(XWPFDocument document, List<? extends EntityModel> entityList) {
+    private void writeDataLines(XWPFDocument document, List<DTOEntityModel> entityList) {
         XWPFTable table = document.createTable(entityList.size()+1, 5);
         int rownumber = 0;
         table.getRow(rownumber).getCell(0).setText("Name");
-        table.getRow(rownumber).getCell(1).setText("Description");
-        table.getRow(rownumber).getCell(2).setText("creation_date");
-        table.getRow(rownumber).getCell(3).setText("modification_date");
-        table.getRow(rownumber).getCell(4).setText("ID");
+        table.getRow(rownumber).getCell(1).setText("creation_date");
+        table.getRow(rownumber).getCell(2).setText("modification_date");
+        table.getRow(rownumber).getCell(3).setText("ID");
 
-        for (EntityModel model : entityList) {
+        for (DTOEntityModel model : entityList) {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             rownumber ++;
             XWPFTableRow row = table.getRow(rownumber);
             createCell(row, 0, model.getName());
-            createCell(row, 1, model.getDescription());
-            createCell(row, 2, dateFormat.format(model.getDateCreate()));
-            createCell(row, 3, dateFormat.format(model.getDateModificate()));
-            createCell(row, 4, String.valueOf(model.getId()));
+            createCell(row, 1, dateFormat.format(model.getDateCreate()));
+            createCell(row, 2, dateFormat.format(model.getDateModificate()));
+            createCell(row, 3, String.valueOf(model.getId()));
         }
     };
 
     public void export(HttpServletResponse response, List<? extends EntityModel> entityList)throws IOException{
         try(XWPFDocument document = new XWPFDocument();
             ServletOutputStream outputStream = response.getOutputStream();){
-            writeDataLines(document, entityList);
+            List<DTOEntityModel> dtoModelList
+                    =  new ModelMapper().map(entityList, new TypeToken<List<DTOEntityModel>>() {}.getType());
+            writeDataLines(document, dtoModelList);
             document.write(outputStream);
         }
     }

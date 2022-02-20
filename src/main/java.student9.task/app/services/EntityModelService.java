@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public interface EntityModelService <S extends MainRepository, T extends EntityModel>{
 
-    List<T> findAll(String name);
+    List<T> findAll();
 
     T create(T model);
 

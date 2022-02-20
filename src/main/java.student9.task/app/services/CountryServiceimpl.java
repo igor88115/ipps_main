@@ -16,10 +16,4 @@ public class CountryServiceimpl extends EntityModelServiceimpl<CountryRepository
         super(countryRepository);
     }
 
-//    @Override
-//    public ResponseEntity<List<Region>> getRegions(long id) {
-//        List<Region> regions = this.mainRepository.getRegions(id);
-//        if (regions.isEmpty() == false) return ResponseEntity.status(HttpStatus.OK).body(regions);
-//        else return new ResponseEntity(HttpStatus.NOT_OK);
-//    }
 }

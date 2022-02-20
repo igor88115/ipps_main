@@ -15,14 +15,13 @@ import java.util.Date;
 @MappedSuperclass
 @Data
 @FilterDef(
-        name = "nameFilter",
-        parameters = @ParamDef(name = "name", type = "string")
+        name = "queryFilter",
+        parameters = @ParamDef(name = "query", type = "string")
 )
 public class EntityModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonView(Views.MainView.class)
-    @Where(clause = "status !='deleted'")
     protected long id;
     @Column(updatable = false)
     @Temporal(TemporalType.DATE)

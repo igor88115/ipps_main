@@ -17,11 +17,11 @@ import java.util.List;
 @EqualsAndHashCode(of = {"id"})
 @Data
 @Filter(
-        name = "nameFilter",
-        condition = "name like :name")
+        name = "queryFilter",
+        condition = "name like :query")
+@Where(clause = "status !='deleted'")
 public class Country extends EntityModel {
     @OneToMany(mappedBy = "countryId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Where(clause = "status !='deleted'")
     private List<Region> regionList;
     @JsonView({Views.MainView.class, Views.NameView.class})
     @Column(length = 20)
