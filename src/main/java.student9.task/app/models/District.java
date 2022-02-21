@@ -1,5 +1,6 @@
 package app.models;
 
+import app.util.Constants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -9,16 +10,15 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.util.List;
 
+import static app.util.Constants.*;
+
 @Entity
-@Table(name = "district")
 @ToString(of = {"id", "text"})
 @EqualsAndHashCode(of = {"id"})
 @Data
 @Filter(
-        name = "queryFilter",
-        condition = "name like :query"
-)
-@Where(clause = "status !='deleted'")
+        name = QUERYFILTER,
+        condition = makeQuery(QUERY))
 public class District extends EntityModel {
 
     @OneToMany(mappedBy = "districtId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

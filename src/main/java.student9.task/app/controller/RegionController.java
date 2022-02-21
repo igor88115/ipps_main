@@ -5,7 +5,6 @@ import app.models.Country;
 import app.dto.DTOModelView;
 import app.models.Region;
 import app.services.RegionService;
-import app.util.Status;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController

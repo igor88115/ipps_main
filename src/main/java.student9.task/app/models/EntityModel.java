@@ -1,23 +1,23 @@
 package app.models;
 
-import app.util.Status;
 import app.util.Views;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Date;
 
+import static app.util.Constants.QUERY;
+import static app.util.Constants.QUERYFILTER;
 
 
 @MappedSuperclass
 @Data
 @FilterDef(
-        name = "queryFilter",
-        parameters = @ParamDef(name = "query", type = "string")
+        name = QUERYFILTER,
+        parameters = @ParamDef(name = QUERY, type = "string")
 )
 public class EntityModel {
     @Id
@@ -32,6 +32,7 @@ public class EntityModel {
     @Temporal(TemporalType.DATE)
     protected Date dateRemove;
     protected Status status;
+
 
     public String getName() {
         return null;

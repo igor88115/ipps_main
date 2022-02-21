@@ -2,7 +2,7 @@ package app.services;
 
 import app.models.EntityModel;
 import app.repository.MainRepository;
-import app.util.Status;
+import app.models.Status;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -23,7 +23,7 @@ public class EntityModelServiceimpl<S extends MainRepository, T extends EntityMo
 
     @Override
     public List<T> findAll() {
-        return this.mainRepository.findAll();
+        return this.mainRepository.findAllByStatus(Status.GOOD);
     }
 
     @Override
@@ -32,8 +32,6 @@ public class EntityModelServiceimpl<S extends MainRepository, T extends EntityMo
         model.setDateCreate(date);
         model.setDateModificate(date);
         model.setStatus(Status.GOOD);
-        System.out.println(model.getClass());
-        System.out.println(model.toString());
         return (T) this.mainRepository.save(model);
     }
 
@@ -54,7 +52,7 @@ public class EntityModelServiceimpl<S extends MainRepository, T extends EntityMo
     @Override
     public T delete(Optional<T> entity) {
         Date date = new Date();
-        entity.get().setStatus(String.valueOf(Status.DELETED));
+        entity.get().setStatus(Status.DELETED);
         entity.get().setDateRemove(date);
         return (T) this.mainRepository.save(entity.get());
     }
@@ -64,7 +62,7 @@ public class EntityModelServiceimpl<S extends MainRepository, T extends EntityMo
         String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename=Excel.xlsx";
         response.setHeader(headerKey, headerValue);
-        List<T> modelList = this.mainRepository.findByStatus(Status.GOOD);
+        List<T> modelList = this.mainRepository.findAllByStatus(Status.GOOD);
         PoiServiceExcel poiService = new PoiServiceExcel();
         poiService.export(response, modelList);
     }
@@ -74,7 +72,7 @@ public class EntityModelServiceimpl<S extends MainRepository, T extends EntityMo
         String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename=Word.doc";
         response.setHeader(headerKey, headerValue);
-        List<T> modelList = this.mainRepository.findByStatus(Status.GOOD);
+        List<T> modelList = this.mainRepository.findAllByStatus(Status.GOOD);
         PoiServiceWord poiServiceWord = new PoiServiceWord();
         poiServiceWord.export(response, modelList);
     }

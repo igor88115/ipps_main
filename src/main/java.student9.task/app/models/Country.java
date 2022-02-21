@@ -11,15 +11,16 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.util.List;
 
+import static app.util.Constants.*;
+
 
 @Entity
 @ToString(of = {"id", "text"})
 @EqualsAndHashCode(of = {"id"})
 @Data
 @Filter(
-        name = "queryFilter",
-        condition = "name like :query")
-@Where(clause = "status !='deleted'")
+        name = QUERYFILTER,
+        condition = "name like :" + QUERY)
 public class Country extends EntityModel {
     @OneToMany(mappedBy = "countryId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Region> regionList;

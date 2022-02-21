@@ -8,16 +8,17 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
+import static app.util.Constants.QUERY;
+import static app.util.Constants.QUERYFILTER;
+
 @Entity
 @Table(name = "locality")
 @ToString(of = {"id", "text"})
 @EqualsAndHashCode(of = {"id"})
 @Data
 @Filter(
-        name = "queryFilter",
-        condition = "name like :query"
-)
-@Where(clause = "status !='deleted'")
+        name = QUERYFILTER,
+        condition = "name like :" + QUERY)
 public class Locality extends EntityModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "districtId")

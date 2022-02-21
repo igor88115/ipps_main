@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import static app.util.Constants.QUERY;
+import static app.util.Constants.QUERYFILTER;
+
 public class BaseAbstractController<T extends EntityModel, S extends EntityModelService> implements BaseController<T> {
 
     S baseEntityService;
@@ -35,10 +38,10 @@ public class BaseAbstractController<T extends EntityModel, S extends EntityModel
     public ResponseEntity<List<DTOModelView>> list(String query) {
         StringBuilder stringBuilder = new StringBuilder(query);
         stringBuilder.append("%");
-        Filter filter = entityManager.unwrap(Session.class).enableFilter("queryFilter");
-        filter.setParameter("query", stringBuilder.toString());
+        Filter filter = entityManager.unwrap(Session.class).enableFilter(QUERYFILTER);
+        filter.setParameter(QUERY, stringBuilder.toString());
         List<T> result = this.baseEntityService.findAll();
-        entityManager.unwrap(Session.class).disableFilter("queryFilter");
+        entityManager.unwrap(Session.class).disableFilter(QUERYFILTER);
         List<DTOModelView> dtoModelViewList
                 =  new ModelMapper().map(result, new TypeToken<List<DTOModelView>>() {}.getType());
         return ResponseEntity.status(HttpStatus.OK).body(dtoModelViewList);
