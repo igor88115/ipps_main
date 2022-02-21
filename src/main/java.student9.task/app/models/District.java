@@ -14,11 +14,11 @@ import java.util.List;
 @ToString(of = {"id", "text"})
 @EqualsAndHashCode(of = {"id"})
 @Data
-@Where(clause = "status !='deleted'")
 @Filter(
-        name = "nameFilter",
-        condition = "name like :name"
+        name = "queryFilter",
+        condition = "name like :query"
 )
+@Where(clause = "status !='deleted'")
 public class District extends EntityModel {
 
     @OneToMany(mappedBy = "districtId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -26,5 +26,7 @@ public class District extends EntityModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "regionId")
     private Region regionId;
+    @Column(length = 200)
+    protected String name;
 
 }

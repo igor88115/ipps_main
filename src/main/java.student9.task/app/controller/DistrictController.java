@@ -1,11 +1,11 @@
 package app.controller;
 
+import app.dto.DTOModelView;
 import app.models.District;
 import app.models.Region;
-import app.util.Views;
 import app.services.DistrictService;
-import com.fasterxml.jackson.annotation.JsonView;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,20 +19,19 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/district")
 public class DistrictController extends BaseAbstractController<District, DistrictService>{
-    protected DistrictService districtService;
 
-    @Autowired
+
     public DistrictController(DistrictService districtService) {
         super(districtService);
-        this.districtService = districtService;
     }
 
-    @JsonView(Views.NameView.class)
-    @GetMapping("/by_regiron/{entity}")
-    public ResponseEntity<List<District>> getLocalities(@PathVariable Optional<Region> entity) {
+    @GetMapping("/by_region/{entity}")
+    public ResponseEntity<List<DTOModelView>> getLocalities(@PathVariable Optional<Region> entity) {
         if (entity.isPresent()) {
             List<District> districtList = entity.get().getDistrictList();
-            return ResponseEntity.status(HttpStatus.FOUND).body(districtList);
+            List<DTOModelView> dtoModelViewList
+                    =  new ModelMapper().map(districtList, new TypeToken<List<DTOModelView>>() {}.getType());
+            return ResponseEntity.status(HttpStatus.OK).body(dtoModelViewList);
         }
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

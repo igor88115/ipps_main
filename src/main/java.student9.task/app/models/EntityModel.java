@@ -1,5 +1,6 @@
 package app.models;
 
+import app.util.Status;
 import app.util.Views;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
@@ -15,19 +16,14 @@ import java.util.Date;
 @MappedSuperclass
 @Data
 @FilterDef(
-        name = "nameFilter",
-        parameters = @ParamDef(name = "name", type = "string")
+        name = "queryFilter",
+        parameters = @ParamDef(name = "query", type = "string")
 )
 public class EntityModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonView(Views.MainView.class)
-    @Where(clause = "status !='deleted'")
     protected long id;
-    @JsonView({Views.MainView.class, Views.NameView.class})
-    protected String name;
-    @JsonView(Views.MainView.class)
-    protected String description;
     @Column(updatable = false)
     @Temporal(TemporalType.DATE)
     protected Date dateCreate;
@@ -35,5 +31,12 @@ public class EntityModel {
     protected Date dateModificate;
     @Temporal(TemporalType.DATE)
     protected Date dateRemove;
-    protected String status;
+    protected Status status;
+
+    public String getName() {
+        return null;
+    }
+
+    public void setName(String name) {
+    }
 }

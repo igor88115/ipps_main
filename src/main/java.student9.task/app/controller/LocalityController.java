@@ -1,11 +1,12 @@
 package app.controller;
 
 
+import app.dto.DTOModelView;
 import app.models.District;
 import app.models.Locality;
-import app.util.Views;
 import app.services.LocalityService;
-import com.fasterxml.jackson.annotation.JsonView;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,16 +26,17 @@ public class LocalityController extends BaseAbstractController<Locality, Localit
     @Autowired
     public LocalityController(LocalityService localityService) {
         super(localityService);
-        this.localityService = localityService;
     }
-    @JsonView(Views.NameView.class)
-    @GetMapping("/by_distict/{entity}")
-    public ResponseEntity<List<Locality>> getLocalities(@PathVariable Optional<District> entity) {
+
+    @GetMapping("/by_district/{entity}")
+    public ResponseEntity<List<DTOModelView>> getLocalities(@PathVariable Optional<District> entity) {
         if (entity.isPresent()) {
             List<Locality> localityList = entity.get().getLocalityList();
-            return ResponseEntity.status(HttpStatus.FOUND).body(localityList);
+            List<DTOModelView> dtoModelViewList
+                    =  new ModelMapper().map(localityList, new TypeToken<List<DTOModelView>>() {}.getType());
+            return ResponseEntity.status(HttpStatus.OK).body(dtoModelViewList);
         }
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
 }
