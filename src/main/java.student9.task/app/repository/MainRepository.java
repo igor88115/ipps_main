@@ -3,11 +3,9 @@ package app.repository;
 import app.models.EntityModel;
 import app.models.Status;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;
@@ -28,20 +26,15 @@ public interface MainRepository <T extends EntityModel> extends JpaRepository<T,
 
     Optional<T> findByStatus(Status status);
 
-//    @Override
-//    default <S extends T> List<S> findAll(Example<S> example){
-//        return (List<S>) findAllByStatus(Status.GOOD);
-//    };
+    Optional<T> findByStatusAndId(Status status, Long aLong);
 
-
-//    @Override
-//    default <S extends T> Optional<S> findOne(Example<S> example){
-//        return (Optional<S>) findByStatus(Status.GOOD);
-//    };
-    Optional<T> findDistinctByStatus(Status status);
     @Override
     default Optional<T> findById(Long aLong) {
-        if (findById(aLong).get().getStatus() == Status.DELETED) return Optional.empty();
-        return findDistinctByStatus(Status.GOOD);
+        return findByStatusAndId(Status.GOOD, aLong);
     }
+
+//    @Override
+//    default Optional<T> findById(Long aLong) {
+//        return findByStatus(Status.GOOD);
+//    }
 }

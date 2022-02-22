@@ -4,12 +4,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.List;
 
-import static app.util.Constants.QUERY;
+import static app.util.Constants.CONDITION;
 import static app.util.Constants.QUERYFILTER;
 
 
@@ -20,7 +19,7 @@ import static app.util.Constants.QUERYFILTER;
 @Data
 @Filter(
         name = QUERYFILTER,
-        condition = "name like :" + QUERY)
+        condition = CONDITION)
 public class Region extends EntityModel {
     @OneToMany(mappedBy = "regionId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<District> districtList;

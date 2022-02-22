@@ -4,11 +4,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
-import static app.util.Constants.QUERY;
+import static app.util.Constants.CONDITION;
 import static app.util.Constants.QUERYFILTER;
 
 @Entity
@@ -18,7 +17,7 @@ import static app.util.Constants.QUERYFILTER;
 @Data
 @Filter(
         name = QUERYFILTER,
-        condition = "name like :" + QUERY)
+        condition = CONDITION)
 public class Locality extends EntityModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "districtId")

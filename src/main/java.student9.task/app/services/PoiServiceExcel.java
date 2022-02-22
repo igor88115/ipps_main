@@ -49,7 +49,6 @@ public class PoiServiceExcel {
         XSSFFont font = workbook.createFont();
         font.setFontHeight(14);
         style.setFont(font);
-        int columnCount = 0;
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         for (EntityModel model : modelList) {
             Row row = sheet.createRow(rowCount++);

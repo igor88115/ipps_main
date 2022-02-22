@@ -58,7 +58,7 @@ public class BaseAbstractController<T extends EntityModel, S extends EntityModel
     @Override
     public ResponseEntity delete(Optional<T> entity) {
         if (entity.isPresent()){
-            return ResponseEntity.status(HttpStatus.OK).body(this.baseEntityService.delete(entity));
+            return ResponseEntity.status(HttpStatus.OK).body(this.baseEntityService.delete(entity.get()));
         }else return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

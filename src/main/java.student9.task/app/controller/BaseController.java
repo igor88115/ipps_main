@@ -20,7 +20,6 @@ public interface BaseController<T extends EntityModel> {
     @GetMapping("{entity}")
     public ResponseEntity<DTOModelView> getById(@PathVariable Optional<T> entity);
 
-
     @DeleteMapping("{entity}")
     public ResponseEntity delete(@PathVariable Optional<T> entity);
 

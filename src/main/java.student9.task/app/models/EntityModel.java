@@ -33,7 +33,6 @@ public class EntityModel {
     protected Date dateRemove;
     protected Status status;
 
-
     public String getName() {
         return null;
     }

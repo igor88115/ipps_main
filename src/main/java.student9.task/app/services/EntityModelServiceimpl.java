@@ -50,11 +50,11 @@ public class EntityModelServiceimpl<S extends MainRepository, T extends EntityMo
     }
 
     @Override
-    public T delete(Optional<T> entity) {
+    public T delete(T entity) {
         Date date = new Date();
-        entity.get().setStatus(Status.DELETED);
-        entity.get().setDateRemove(date);
-        return (T) this.mainRepository.save(entity.get());
+        entity.setStatus(Status.DELETED);
+        entity.setDateRemove(date);
+        return (T) this.mainRepository.save(entity);
     }
 
     @Override

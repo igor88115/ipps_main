@@ -20,7 +20,7 @@ public interface EntityModelService <S extends MainRepository, T extends EntityM
 
     T update(T model);
 
-    T delete(Optional<T> entity);
+    T delete(T entity);
 
     void exportToExcel(HttpServletResponse response) throws IOException;
 

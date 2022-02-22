@@ -1,6 +1,7 @@
 package app.models;
 
 public enum Status {
+
 //    GOOD("good"),
 //    DELETED("deleted");
 //
